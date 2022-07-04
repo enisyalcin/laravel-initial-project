@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('author');
-            $table->string('photo_path');
+            $table->string('photo')->nullable();
             $table->string('isbn');
             $table->timestamps();
         });
