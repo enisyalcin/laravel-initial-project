@@ -27,7 +27,7 @@ class StoreBookRequest extends FormRequest
             'name' => 'required|max:255',
             'author' => 'required|max:255',
             'isbn' => 'required|unique:books|max:255',
-            'photo_path' => 'images:jpg,png,jpeg',
+            'photo_path' => 'images|mimes:png,jpg,jpeg',
         ];
     }
 }
