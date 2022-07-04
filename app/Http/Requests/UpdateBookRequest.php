@@ -27,7 +27,7 @@ class UpdateBookRequest extends FormRequest
             'name' => 'required|max:255',
             'author' => 'required|max:255',
             'isbn' => 'required|unique:books|max:255',
-            'photo_path' => 'images|mimes:png,jpg,jpeg',
+            'photo' => 'images|mimes:png,jpg,jpeg',
         ];
     }
 }
