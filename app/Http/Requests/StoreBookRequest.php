@@ -13,7 +13,7 @@ class StoreBookRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,6 +24,10 @@ class StoreBookRequest extends FormRequest
     public function rules()
     {
         return [
+            'name' => 'required|max:255',
+            'author' => 'required|max:255',
+            'isbn' => 'required|unique:books|max:255',
+            'photo_path' => 'images:jpg,png,jpeg',
         ];
     }
 }
