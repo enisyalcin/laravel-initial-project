@@ -26,8 +26,8 @@ class UpdateBookRequest extends FormRequest
         return [
             'name' => 'required|max:255',
             'author' => 'required|max:255',
-            'isbn' => 'required|unique:books|max:255',
-            'photo' => 'images|mimes:png,jpg,jpeg',
+            'isbn' => 'required|max:255',
+            'photo' => 'file|mimes:png,jpg,jpeg',
         ];
     }
 }
