@@ -40,7 +40,7 @@
                                         {{ method_field('DELETE') }}
 
                                         <div class="form-group">
-                                            <input type="submit" class="btn btn-sm btn-danger" value="Delete user">
+                                            <input type="submit" class="btn btn-sm btn-danger" value="Delete">
                                         </div>
                                     </form>
                                 </td>
