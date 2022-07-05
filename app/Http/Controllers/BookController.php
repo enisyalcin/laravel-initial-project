@@ -53,7 +53,7 @@ class BookController extends Controller
             $validated["photo"]=$fileName;
         }
         Book::create($validated);
-        return redirect()->back()->withSuccess("Book was created.");
+        return redirect()->route("book.index")->withSuccess("Book was created.");
     }
 
     /**
@@ -119,6 +119,6 @@ class BookController extends Controller
         }
 
         $book->delete();
-        return redirect()->back()->withSuccess("Book was deleted.");
+        return redirect()->route("book.index")->withSuccess("Book was deleted.");
     }
 }
