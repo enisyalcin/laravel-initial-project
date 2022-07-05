@@ -5,9 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Http\Requests\StoreBookRequest;
 use App\Http\Requests\UpdateBookRequest;
+use Illuminate\Contracts\Cache\Store;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class BookController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(["index","show"]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -26,7 +34,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        return view("book.add");
     }
 
     /**
@@ -37,7 +45,15 @@ class BookController extends Controller
      */
     public function store(StoreBookRequest $request)
     {
-        //
+        $validated=$request->validated();
+        if($request->hasFile('photo')){
+            $file=$request->file('photo');
+            $fileName=md5(time().$file->getClientOriginalName()).".".$file->getClientOriginalExtension();
+            $file->move(public_path("images"),$fileName);
+            $validated["photo"]=$fileName;
+        }
+        Book::create($validated);
+        return redirect()->back()->withSuccess("Book was created.");
     }
 
     /**
@@ -48,7 +64,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return view("book.show",["book"=>$book]);
     }
 
     /**
@@ -59,7 +75,7 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        return view("book.edit",["book"=>$book]);
     }
 
     /**
@@ -71,7 +87,20 @@ class BookController extends Controller
      */
     public function update(UpdateBookRequest $request, Book $book)
     {
-        //
+        $validated=$request->validated();
+        if($request->hasFile("photo")){
+            $photoFilePath=public_path('images/').$book->photo;
+            if(file_exists($photoFilePath)){
+                File::delete($photoFilePath);
+            }
+
+            $file=$request->file('photo');
+            $fileName=md5(time().$file->getClientOriginalName()).".".$file->getClientOriginalExtension();
+            $file->move(public_path("images"),$fileName);
+            $validated["photo"]=$fileName;
+        }
+        $book->update($validated);
+        return redirect()->back()->withSucess("Book is updated.");
     }
 
     /**
@@ -82,6 +111,13 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        if(!empty($book->photo)){
+            $photoFilePath=public_path('images/').$book->photo;
+            if(file_exists($photoFilePath)){
+                File::delete($photoFilePath);
+            }
+        }
+
         $book->delete();
         return redirect()->back()->withSuccess("Book was deleted.");
     }
